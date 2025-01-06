@@ -46,7 +46,7 @@ API gateway to get redirected to the right microservice.
  - Parallel Development is easy.
  - Easier to reason about. Knowing what requires scaling.
  - Needs skilled architect.
- - 
+
 
 Advantages:
 

@@ -15,7 +15,7 @@ There are three major principles for good coding practice
 1. Readability -> The code should be readable and workable with
 2. Extensibility -> Adding a new feature over an existing codebase is easy and doesn't require the existing codebase to 
 change.
-3. Correctness -> Self-explanatory
+3. Correctness -> Self-explanatory, bug-less code
 
 ### API and Package Structuring
  - APIs are endpoints that other developers use to interact with your system.
@@ -23,6 +23,10 @@ change.
 object it returns can be called as APIs.
  - There is no other way to interact with a system except APIs.
 
-The agenda is to write not just correct code, but also that continues to work for different scenarios in future.
+The agenda is to write not just correct code, but also that continues to work for different scenarios in the future.
 
+### Parent vs. Base Class function
+ - If a functionality is not common in all the cases or one is unsure, then it is better to put it explicitly in Base
+class, else if exists on all the cases, add in the Parent class. 
 
+[code](https://github.com/InterviewReady/turn-based-game-ai)
