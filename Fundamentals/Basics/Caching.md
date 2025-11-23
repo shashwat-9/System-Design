@@ -1,6 +1,7 @@
 # Caching
 
- - The generic example of caching is discussed, that a user queries for a record in the Database, and another user with similar background tries to access it, then rather than querying the DB again, we can cache the data, for an optimized performance.
+ - The generic example of caching is discussed, that a user queries for a record in the Database, and another user with similar
+background tries to access it, then rather than querying the DB again, we can cache the data, for an optimized performance.
  - We typically take a section of the Database, that is frequently accessed and put it in Cache.
  - For smaller DBs, ranging in few GBs, it might be a considerable thought to put the DB in the Cache.
  - At a high level, caching reduces latency by avoiding repeated work through storage.
@@ -44,4 +45,29 @@ Cache Policy and the placement matter.
  - In this policy, we directly write in the DB. 
  - There may be some mechanism in the cache, like TTL etc, that will kick the stale data, and later on data will be loaded from DB, when required.
 
+## Replacement Policies
+ - When we have a limited size of the Cache, and we want to insert a new element to it, some existing record have to be evicted, 
+and the policies to do so are called as Replacement Policies.
 
+### Least Recently Used
+ - This policy states to evict the record which is _least Recently Used_, that is the one which accesses the most earliest amongst all.
+ - There could be a column for accessed_timestamp, and wherever the timestamp is earliest is evicted.
+
+### Least Frequently Used
+ - The record with the least usage frequency is evicted. Frequency is how many times it has been used.
+ - The case, where a new record is loaded upon eviction of another, and say the cache again don't have the requested record,
+so a yet new entry is to be loaded in the cache. This new will kick out the recently entered record as it have the least usage frequency
+. If this case keeps on reoccurring again and again, we call it trashing, that is loading and evicting the cache again and again.
+
+
+### Segmented LRU
+ - This is how MemCacheD manages cache.
+ - There are three regions in cache, hot, warm, cold.
+ - The hot is the recently incoming records, warm is where highly used elements are stored, and cold is where the rest of the elements reside.
+ - The elements are initially loaded in the cold region, and when the frequency of usage rises, they are promoted to a hot region.
+ - When the hot region is filled up, and some other entry from the cold region is to be loaded, the existing record have to be evicted back to the cold region.
+ - For eviction, LRU is used from both hot and cold region, and LFU is used to promote element from cold to hot.
+ - This way, both LRU and LFU is used, and thus is a hybrid method.
+ - And thus memCached implements Segmented LRU, that is 2 Segments are there, Hot & Cold.
+
+[Refer this for more on this](./Resources/Caching.pdf)
