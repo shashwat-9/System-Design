@@ -136,9 +136,33 @@ As TCP will send the packets one by one, and if one fails then keep retring unti
 that is guaranteed and ordered delivery etc. HTTP3.0 uses `QUIC` + `UDP` protocol.
 
 ### Protocols for Video Transmission
- - Statelessness doesn't look like a good idea.
+ - Videos are big and thus can't be sent in a single response.
+ - Statelessness doesn't look like a good idea, as we will be sending the chunks one-by-one.
  - And for the real-time video streaming, we can go for UDP, but the there maybe cases like videos of movies, where the reliability is important and thus TCP can be used.
- - 
+ - `HTTP-DASH` is one of the protocols that run over TCP, there is going to be ordered and guaranteed delivery.
+ - DASH-> Dynamic Adaptive Streaming over HTTP.
+ - The DASH protocol is dynamically adaptive over the network bandwidth, that is, if the user can handle x mega pixles at a certain rate, then the server will send that only.
+ - `HLS` is a similar protocol on MAC devices that tells the quality that is required to by the client.
+
+#### Conference video protocol
+ - An example architecture is discussed, where a Google server is taken and 2 clients are communicating through this server.
+ - The problem with this example architecture is that the Google server is just exchanging data b/w the users leading to:
+1. Network requirements explosion on Google's side
+2. Slowness
+3. Single point of failure
+ - The way-around could be why the users can't communicate directly, but there are challenges, like the user need to find
+the IP of another user. And the IP may require `NAT` in middle.
+ - The protocol to be used here is `WebRTC`, that handles this, and thus the connection is peer2peer. It is written over UDP.
+ - Initially, the clients don't know of the another user(with gmail ID) IP address. So, both connects to a conference on the 
+Google's server, and the server authenticates both of them, and returns the IP of another to each, and hence they connect 
+with each other's browsers.
+ - There are multiple ways to transfer media in this case, like using `TURN` servers or `STUN` servers over the internet backbone.
+ - Therefore, this approach is :
+1. Fast
+2. Saves resources
+3. Robust
+ - In this approach, if another person join(total >= 3), there will be a requirement of having each connection to each individual.
+ - Making the problem to be of `O(n^2)`.
+ - This problem is solved by `Media` servers which are used to broadcast, and all the users connect to this single servers.
 
 [Refer this for more on this](./Resources/networks.pdf)
-
