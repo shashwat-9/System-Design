@@ -16,7 +16,7 @@ Design Tradeoff: The situation in which one attribute of a system is made less u
 #### Push
 - We push the message to each client.
 - Instead of sending the message to each client at once, we can send in batches, within a specified interval of time. So, our servers are not overloaded, and every required client gets the image within a specified time.
-- Another way is to scale the hardware. Like, say there are many orders during lunch time on Zomato, and we have planned to send the notifications for discount etc, so we can scale the Hardware during that time.
+- Other way is to scale the hardware. Like, say there are many orders during lunch time on Zomato, and we have planned to send the notifications for discount etc, so we can scale the Hardware during that time.
 
 
 #### Pull
@@ -58,4 +58,36 @@ Throughput = Application Work/Processing Power.
 - If we have alot of threads, then context switching will be there eating of time, leading to lesser throughput. It's also a case of thrashing.
 
 
-### Consistency vs Availability
+## Consistency vs Availability
+- This problem arises when we are having parallel/concurrent processing ot distributed systems.
+- Say, a user changes some data, and another is reading the same record at the same instant of time, the reader read the stale data, and then the record was updated thereafter due to scheduling etc. It shows the record received was not consistent.
+- Another example is, what if we have distributed replicas over continents, and one DB got the update, the other DB, though it makes the system available in a specific continent, has the stale data.
+
+
+## Latency vs Accuracy
+- A typical example is using cache, what if the DB is updated and cache is not yet, we end up sending a stale data to the consumer.
+- `Accuracy` is used because, a system might use approximations, than to fetch the actual value, to reduce latency.
+- A system with approximation example could be, say google maps showing a broken road, it may not cruch through all the data points, but maybe the 5 randomly sampled speeds of users on the road.
+- Low accuracy with Low latency, high latency with high accuracy.
+
+## SQL vs NoSQL Databases.
+- There is no direct relation, ofcourse, unlike other tradeoffs.
+- Usually, the differences are:
+  NoSQL:
+1. Relaxed consistency (usually)
+2. Cluster Architecture -> many nodes in the cluster and anyone could reaspond to read/write requests. All nodes are equal, and typically have some consensus etc.
+3. Leader Election algorithm, which keeps all nodes in sync.
+4. Inbuilt sharding
+5. No ACID support.
+
+SQL Database:
+1. High Consistency (usually)
+2. Primary replica Architecture, primary node gets all the write requests, rest others gets read requests.
+3. Assigned primary.
+4. No inbuilt sharding
+5. ACID support.
+
+## Relation between tradeoffs
+- Each parameter can have relations with each other.
+- Like increasing memory should ideally reduce latency, but may not have any strict  relation with consistency and availability.
+- CAP theorem states that a system cannot be consistent, available and partition tolerant at the same time.
